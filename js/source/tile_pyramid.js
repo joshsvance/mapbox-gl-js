@@ -99,7 +99,7 @@ TilePyramid.prototype = {
      * @returns {number} zoom level
      */
     coveringZoomLevel: function(transform) {
-        return Math.floor(this.getZoom(transform));
+        return Math.round(this.getZoom(transform));
     },
 
     /**
@@ -188,7 +188,7 @@ TilePyramid.prototype = {
         var tile;
 
         // Determine the overzooming/underzooming amounts.
-        var zoom = Math.floor(this.getZoom(transform));
+        var zoom = Math.round(this.getZoom(transform));
         var minCoveringZoom = util.clamp(zoom - 10, this.minzoom, this.maxzoom);
         var maxCoveringZoom = util.clamp(zoom + 1,  this.minzoom, this.maxzoom);
 
