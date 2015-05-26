@@ -65,7 +65,7 @@ test('TilePyramid#coveringZoomLevel', function(t) {
     t.deepEqual(pyramid.coveringZoomLevel(transform), 11);
 
     transform.zoom = 11.5;
-    t.deepEqual(pyramid.coveringZoomLevel(transform), 11);
+    t.deepEqual(pyramid.coveringZoomLevel(transform), 12);
 
     pyramid.tileSize = 256;
 
@@ -88,7 +88,7 @@ test('TilePyramid#coveringZoomLevel', function(t) {
     t.deepEqual(pyramid.coveringZoomLevel(transform), 12);
 
     transform.zoom = 11.5;
-    t.deepEqual(pyramid.coveringZoomLevel(transform), 12);
+    t.deepEqual(pyramid.coveringZoomLevel(transform), 13);
 
     t.end();
 });
