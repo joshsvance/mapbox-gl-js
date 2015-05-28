@@ -199,7 +199,7 @@ SymbolBucket.prototype.addFeature = function(lines, shapedText, shapedIcon) {
 
             var inside = !(anchor.x < 0 || anchor.x > 4096 || anchor.y < 0 || anchor.y > 4096);
 
-            console.log(anchor.skip);
+            //console.log(anchor.skip);
             if ((anchor.skip) || (avoidEdges && !inside)) continue;
             
 

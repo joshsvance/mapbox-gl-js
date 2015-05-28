@@ -50,10 +50,10 @@ function getAnchors(line, spacing, maxRepeatDistance, maxAngle, shapedText, shap
     //var offset = (repeatDistance > 0 && continuedLine) ? 
     // Maybe add another condition to use repeatDistance value first if there is one
       var offset = continuedLine ? 
-        ((labelLength / 2 + spacing / 2) * boxScale * overscaling) % spacing : //first instance of spacing is wrong? should not be * tilePixelRatio
+        ((labelLength / 2 * boxScale + spacing / 2) * overscaling) % spacing :
         ((labelLength / 2 + extraOffset) * boxScale * overscaling) % spacing;    
 
-    console.log(labelLength + " " + spacing + " " + offset);
+    //if ((labelLength * boxScale) > spacing && continuedLine) { console.log((labelLength * boxScale) + " " + spacing + " " + offset); }
 
     return resample(line, offset, spacing, angleWindowSize, maxAngle, labelLength * boxScale, continuedLine, false);
 }
@@ -62,7 +62,14 @@ function getAnchors(line, spacing, maxRepeatDistance, maxAngle, shapedText, shap
 function resample(line, offset, spacing, angleWindowSize, maxAngle, labelLength, continuedLine, placeAtMiddle) {
 
     var distance = 0,
-        markedDistance = offset ? offset - spacing : 0;
+        markedDistance = offset ? offset - spacing : 0,
+        longLabelPadding = 400;  
+
+    if (spacing - labelLength < longLabelPadding ) {
+            //console.log(spacing)
+            spacing += longLabelPadding; // does this work with the second anchor placement attempt?
+            //console.log(spacing);
+        }
 
     var anchors = [];
 
