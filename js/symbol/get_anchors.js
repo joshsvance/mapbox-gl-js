@@ -16,42 +16,45 @@ function getAnchors(line, spacing, maxRepeatDistance, maxAngle, shapedText, shap
         3 / 5 * glyphSize * boxScale :
         0;
 
+    var labelLength = Math.max(
+        shapedText ? shapedText.right - shapedText.left : 0,
+        shapedIcon ? shapedIcon.right - shapedIcon.left : 0);
+
+// Would it be better to move this into addFeature function of symbol_bucket, since this
+// only needs to be set once per feature? But would also need to move labelLength.
+    var longLabelPadding = 50 * boxScale ; // should this be based on a property? 
+
+    if (spacing - labelLength * boxScale  < longLabelPadding) {
+        //console.log("spacing: " + spacing);
+        spacing = labelLength * boxScale + longLabelPadding;
+        var adjustedSpacing = true;
+        //console.log(adjustedSpacing);
+        //console.log("adjusted spacing: " + spacing + " boxScale: " + boxScale);
+    }
+
     // Offset the first anchor by half the label length, plus either the -repeat-distance length
     // (if the line continued from outside the tile boundary), or a set extra offset.
 
-    /* 
-    // Not sure if this works. Rewrote as nested if/else statement.
-    var labelLength = shapedText && shapedIcon ?
-        Math.max(shapedText.right - shapedText.left, shapedIcon.right - shapedIcon.left) :
-        shapedText ?
-        shapedText.right - shapedText.left :
-        shapedIcon.right - shapedIcon.left;
-        */
-
-    if (shapedText) {
-        if (shapedIcon) {
-            var labelLength = Math.max(shapedText.right - shapedText.left, shapedIcon.right - shapedIcon.left); 
-        } else {
-            var labelLength = shapedText.right - shapedText.left;
-        } 
-    } else {
-        var labelLength = shapedIcon.right - shapedIcon.left;
-    }   
-
-    // Add a bit of extra offset to avoid collisions at T intersections.
-    var extraOffset = glyphSize * 2;
-
     // Is the line continued from outside the tile boundary?
-    if ((line[0].x == (0 || 4096)) || (line[0].y == (0 || 4096))) {
+    //if ((line[0].x == (0 || 4096)) || (line[0].y == (0 || 4096))) { 
+    // ^ why doesn't this work? 
+      if (line[0].x == 0 || line[0].x == 4096 || line[0].y == 0 || line[0].y == 4096) {  
         var continuedLine = true;
+        console.log("continuedLine: " + continuedLine);
     }
 
-    //(continuedLine) { console.log(firstPoint.x + " " + firstPoint.y + " " + continuedLine); }
+    // Add a bit of fixed extra offset for non-continued lines to avoid collisions at T intersections.
+    var extraOffset = glyphSize * 2;
+
     //var offset = (repeatDistance > 0 && continuedLine) ? 
     // Maybe add another condition to use repeatDistance value first if there is one
-      var offset = continuedLine ? 
-        ((labelLength / 2 * boxScale + spacing / 2) * overscaling) % spacing :
-        ((labelLength / 2 + extraOffset) * boxScale * overscaling) % spacing;    
+      var offset = !continuedLine ? 
+        ((labelLength / 2 + extraOffset) * boxScale * overscaling) % spacing :
+        adjustedSpacing ?
+        ((labelLength / 2 * boxScale + longLabelPadding) * overscaling) % spacing :
+        ((labelLength / 2 * boxScale + spacing / 2) * overscaling) % spacing;
+           
+        if(!continuedLine && !adjustedSpacing) { console.log(offset); }   
 
     //if ((labelLength * boxScale) > spacing && continuedLine) { console.log((labelLength * boxScale) + " " + spacing + " " + offset); }
 
@@ -62,14 +65,7 @@ function getAnchors(line, spacing, maxRepeatDistance, maxAngle, shapedText, shap
 function resample(line, offset, spacing, angleWindowSize, maxAngle, labelLength, continuedLine, placeAtMiddle) {
 
     var distance = 0,
-        markedDistance = offset ? offset - spacing : 0,
-        longLabelPadding = 400;  
-
-    if (spacing - labelLength < longLabelPadding ) {
-            //console.log(spacing)
-            spacing += longLabelPadding; // does this work with the second anchor placement attempt?
-            //console.log(spacing);
-        }
+        markedDistance = offset ? offset - spacing : 0;
 
     var anchors = [];
 

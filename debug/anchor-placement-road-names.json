@@ -4924,11 +4924,11 @@
         ]
       ],
       "layout": {
-        "visibility": "none"
+        "visibility": "visible"
       },
       "paint": {
         "line-color": "blue",
-        "line-opacity": 0.1
+        "line-opacity": 1
       }
     }, 
     {
@@ -4954,11 +4954,11 @@
         ]
       ],
       "layout": {
-        "visibility": "none"
+        "visibility": "visible"
       },
       "paint": {
         "line-color": "purple",
-        "line-opacity": 0.1
+        "line-opacity": 1
       }
     },
     {
@@ -4986,11 +4986,11 @@
         ]
       ],
       "layout": {
-        "visibility": "none"
+        "visibility": "visible"
         },
       "paint": {
         "line-color": "red",
-        "line-opacity": 0.5
+        "line-opacity": 1
       }
     },
     {
@@ -5012,7 +5012,7 @@
       ],
       "layout": {
         "text-allow-overlap": false,
-        "symbol-min-distance": 150,
+        "symbol-min-distance": 100,
         "text-repeat-distance": 0,
         "text-ignore-placement": false,
         "text-max-angle": 30,
